@@ -9,6 +9,7 @@ map_filas = 8
 white = 50
 black = 50
 color_fondo = [82, 82, 82]
+ficha_anterior = "white"
 
         #   a  b  c  d  e  f  g  h
 board = [   0, 1, 0, 1, 0, 1, 0, 1, # 8
@@ -153,110 +154,137 @@ def column(pixel):
     elif pixel > 450:
         return 7
 
-class Piece(pygame.sprite.Sprite):
-    def __init__(self, archivo_img, pos):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(archivo_img).convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.x = pos[0]
-        self.rect.y = pos[1]
-
 def mov_torre(posi, posf, fichai, fichaf):
     if posi + 8 == posf or posi + 16 == posf or posi + 24 == posf or posi + 32 == posf or posi + 40 == posf or posi + 48 == posf or posi + 56 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi - 8 == posf or posi - 16 == posf or posi - 24 == posf or posi - 32 == posf or posi - 40 == posf or posi - 48 == posf or posi - 56 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi >= 0 and posi <= 7 and posf >= 0 and posf <= 7 or posi >= 8 and posi <= 15 and posf >= 8 and posf <= 15 or posi >= 16 and posi <= 23 and posf >= 16 and posf <= 23 or posi >= 24 and posi <= 31 and posf >= 24 and posf <= 31 or posi >= 32 and posi <= 39 and posf >= 32 and posf <= 39 or posi >= 40 and posi <= 47 and posf >= 40 and posf <= 47 or posi >= 48 and posi <= 55 and posf >= 48 and posf <= 55 or posi >= 56 and posi <= 63 and posf >= 56 and posf <= 63:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
+    else:
+        return False
 
 def mov_peon(posi, posf, fichai, fichaf):
     if posi >= 8 and posi <= 15 or posi >= 48 and posi <= 55:
         if fichai == "black" and posi + 8 == posf or fichai == "white" and posi - 8 == posf or fichai == "black" and posi + 16 == posf or fichai == "white" and posi - 16 == posf:
             if fichaf == "none":
-                pieces[posf] = pieces[posi]
-                pieces[posi] = -1
+                return True
+            else:
+                return False
+        else:
+            return False
     elif fichai == "black" and posi + 8 == posf or fichai == "white" and posi - 8 == posf:
         if fichaf == "none":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif fichai == "black" and posi + 9 == posf or posi + 7 == posf:
         if fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif fichai == "white" and posi - 9 == posf or posi - 7 == posf:
         if fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
+    else:
+        return False
 
 def mov_alfil(posi, posf, fichai, fichaf):
     if posi + 9 == posf or posi + 18 == posf or posi + 27 == posf or posi + 36 == posf or posi + 45 == posf or posi + 54 == posf or posi + 63 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi - 9 == posf or posi - 18 == posf or posi - 27 == posf or posi - 36 == posf or posi - 45 == posf or posi - 54 == posf or posi - 63 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi + 7 == posf or posi + 14 == posf or posi + 21 == posf or posi + 28 == posf or posi + 35 == posf or posi + 42 == posf or posi + 49 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi - 7 == posf or posi - 14 == posf or posi - 21 == posf or posi - 28 == posf or posi - 35 == posf or posi - 42 == posf or posi - 49 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
+    else:
+        return False
 
 def mov_rey(posi, posf, fichai, fichaf):
     if posi + 1 == posf or posi - 1 == posf or posi + 8 == posf or posi - 8 == posf or posi - 7 == posf or posi - 9 == posf or posi + 7 == posf or posi + 9 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
+    else:
+        return False
 
 def mov_reina(posi, posf, fichai, fichaf):
     if posi + 1 == posf or posi - 1 == posf or posi + 8 == posf or posi - 8 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi + 9 == posf or posi + 18 == posf or posi + 27 == posf or posi + 36 == posf or posi + 45 == posf or posi + 54 == posf or posi + 63 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi - 9 == posf or posi - 18 == posf or posi - 27 == posf or posi - 36 == posf or posi - 45 == posf or posi - 54 == posf or posi - 63 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi + 7 == posf or posi + 14 == posf or posi + 21 == posf or posi + 28 == posf or posi + 35 == posf or posi + 42 == posf or posi + 49 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi - 7 == posf or posi - 14 == posf or posi - 21 == posf or posi - 28 == posf or posi - 35 == posf or posi - 42 == posf or posi - 49 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi + 8 == posf or posi + 16 == posf or posi + 24 == posf or posi + 32 == posf or posi + 40 == posf or posi + 48 == posf or posi + 56 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi - 8 == posf or posi - 16 == posf or posi - 24 == posf or posi - 32 == posf or posi - 40 == posf or posi - 48 == posf or posi - 56 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
     elif posi >= 0 and posi <= 7 and posf >= 0 and posf <= 7 or posi >= 8 and posi <= 15 and posf >= 8 and posf <= 15 or posi >= 16 and posi <= 23 and posf >= 16 and posf <= 23 or posi >= 24 and posi <= 31 and posf >= 24 and posf <= 31 or posi >= 32 and posi <= 39 and posf >= 32 and posf <= 39 or posi >= 40 and posi <= 47 and posf >= 40 and posf <= 47 or posi >= 48 and posi <= 55 and posf >= 48 and posf <= 55 or posi >= 56 and posi <= 63 and posf >= 56 and posf <= 63:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
+    else:
+        return False
 
 def mov_caballo(posi, posf, fichai, fichaf):
     if posi + 15 == posf or posi + 17 == posf or posi - 15 == posf or posi - 17 == posf or posi + 10 == posf or posi - 10 == posf or posi - 6 == posf or posi + 6 == posf:
         if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            pieces[posf] = pieces[posi]
-            pieces[posi] = -1
+            return True
+        else:
+            return False
+    else:
+        return False
 
 if __name__ == '__main__':
     # Inicializar pygame
@@ -272,6 +300,7 @@ if __name__ == '__main__':
     coord1 = 0
     coord2 = 0
     fichai = 0
+    turno = 0 # -> first black -> 1 white
     while not fin:
         # capturar eventos
         pos = pygame.mouse.get_pos()
@@ -287,9 +316,16 @@ if __name__ == '__main__':
                         fichai = pieces[posi]
                         if fichai % 2 == 0:
                             color_fichai = "black"
+                            if ficha_anterior == "white":
+                                coord1 = 1
+                            else:
+                                coord1 = 0
                         else:
                             color_fichai = "white"
-                        coord1 = 1
+                            if ficha_anterior == "black":
+                                coord1 = 1
+                            else:
+                                coord1 = 0
                 elif coord2 == 0:
                     posf = row(pos[0]) + column(pos[1]) * 8
                     fichaf = pieces[posf]
@@ -300,27 +336,45 @@ if __name__ == '__main__':
                     else:
                         color_fichaf = "white"
                     if fichai == 2 or fichai == 3:
-                        mov_rey(posi, posf, color_fichai, color_fichaf)
+                        if mov_rey(posi, posf, color_fichai, color_fichaf):
+                            pieces[posf] = pieces[posi]
+                            pieces[posi] = -1
+                            ficha_anterior = color_fichai
                         coord1 = 0
                         coord2 = 0
                     elif fichai == 4 or fichai == 5:
-                        mov_reina(posi, posf, color_fichai, color_fichaf)
+                        if mov_reina(posi, posf, color_fichai, color_fichaf):
+                            pieces[posf] = pieces[posi]
+                            pieces[posi] = -1
+                            ficha_anterior = color_fichai
                         coord1 = 0
                         coord2 = 0
                     elif fichai == 6 or fichai == 7:
-                        mov_torre(posi, posf, color_fichai, color_fichaf)
+                        if mov_torre(posi, posf, color_fichai, color_fichaf):
+                            pieces[posf] = pieces[posi]
+                            pieces[posi] = -1
+                            ficha_anterior = color_fichai
                         coord1 = 0
                         coord2 = 0
                     elif fichai == 8 or fichai == 9:
-                        mov_alfil(posi, posf, color_fichai, color_fichaf)
+                        if mov_alfil(posi, posf, color_fichai, color_fichaf):
+                            pieces[posf] = pieces[posi]
+                            pieces[posi] = -1
+                            ficha_anterior = color_fichai
                         coord1 = 0
                         coord2 = 0
                     elif fichai == 10 or fichai == 11:
-                        mov_caballo(posi, posf, color_fichai, color_fichaf)
+                        if mov_caballo(posi, posf, color_fichai, color_fichaf):
+                            pieces[posf] = pieces[posi]
+                            pieces[posi] = -1
+                            ficha_anterior = color_fichai
                         coord1 = 0
                         coord2 = 0
                     elif fichai == 12 or fichai == 13:
-                        mov_peon(posi, posf, color_fichai, color_fichaf)
+                        if mov_peon(posi, posf, color_fichai, color_fichaf):
+                            pieces[posf] = pieces[posi]
+                            pieces[posi] = -1
+                            ficha_anterior = color_fichai
                         coord1 = 0
                         coord2 = 0
                     else:
