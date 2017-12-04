@@ -9,8 +9,9 @@ map_filas = 8
 white = 50
 black = 50
 color_fondo = [82, 82, 82]
+
         #   a  b  c  d  e  f  g  h
-board = [ 0, 1, 0, 1, 0, 1, 0, 1, # 8
+board = [   0, 1, 0, 1, 0, 1, 0, 1, # 8
             1, 0, 1, 0, 1, 0, 1, 0, # 7
             0, 1, 0, 1, 0, 1, 0, 1, # 6
             1, 0, 1, 0, 1, 0, 1, 0, # 5
@@ -20,13 +21,54 @@ board = [ 0, 1, 0, 1, 0, 1, 0, 1, # 8
             1, 0, 1, 0, 1, 0, 1, 0, # 1
             ]
 
-# Creando grupos - Globales -
-caballos = pygame.sprite.Group()
-todos = pygame.sprite.Group()
+'''
+blacks
+blackKing = 2 rey
+blackQueen = 4 reina
+blackRook = 6 torre
+blackBishop = 8 alfil
+blackKnight = 10 caballo
+blackPawn = 12 peon
+
+whites
+whiteKing = 3 rey
+whiteQueen = 5 reina
+whiteRook = 7 torre
+whiteBishop = 9 alfil
+whiteKnight = 11 caballo
+whitePawn = 13 peon
+
+0 = white
+1 = black
+'''
+        #   a  b  c  d  e  f  g  h
+pieces = [  6, 10, 8, 4, 2, 8, 10, 6, # 8
+            12, 12, 12, 12, 12, 12, 12, 12, # 7
+            -1, -1, -1, -1, -1, -1, -1, -1, # 6
+            -1, -1, -1, -1, -1, -1, -1, -1, # 5
+            -1, -1, -1, -1, -1, -1, -1, -1, # 4
+            -1, -1, -1, -1, -1, -1, -1, -1, # 3
+            13, 13, 13, 13, 13, 13, 13, 13, # 2
+            7, 11, 9, 5, 3, 9, 11, 7, # 1
+            ]
+
+# upload images
+piece_white = pygame.image.load('white.png')
+piece_black = pygame.image.load('gray.png')
+blackKing = pygame.image.load('blackKing.png')
+whiteKing = pygame.image.load('whiteKing.png')
+blackQueen = pygame.image.load('blackQueen.png')
+whiteQueen = pygame.image.load('whiteQueen.png')
+blackRook = pygame.image.load('blackRook.png')
+whiteRook = pygame.image.load('whiteRook.png')
+blackBishop = pygame.image.load('blackBishop.png')
+whiteBishop = pygame.image.load('whiteBishop.png')
+blackKnight = pygame.image.load('blackKnight.png')
+whiteKnight = pygame.image.load('whiteKnight.png')
+blackPawn = pygame.image.load('blackPawn.png')
+whitePawn = pygame.image.load('whitePawn.png')
 
 def Draw(nombre_mapa):
-    piece_white = pygame.image.load('white.png')
-    piece_black = pygame.image.load('gray.png')
     inicio = x_i = y_j = 0
     y = 100
     fin = map_columnas
@@ -37,10 +79,34 @@ def Draw(nombre_mapa):
             x = 250 + (x_i * white)
             if element == 0:
                 pantalla.blit(piece_white,(x,y))
-                print x,y
             elif element == 1:
                 pantalla.blit(piece_black,(x,y))
-                print x,y
+            elif element == 2:
+                pantalla.blit(blackKing,(x,y))
+            elif element == 3:
+                pantalla.blit(whiteKing,(x,y))
+            elif element == 4:
+                pantalla.blit(blackQueen,(x,y))
+            elif element == 5:
+                pantalla.blit(whiteQueen,(x,y))
+            elif element == 6:
+                pantalla.blit(blackRook,(x,y))
+            elif element == 7:
+                pantalla.blit(whiteRook,(x,y))
+            elif element == 8:
+                pantalla.blit(blackBishop,(x,y))
+            elif element == 9:
+                pantalla.blit(whiteBishop,(x,y))
+            elif element == 10:
+                pantalla.blit(blackKnight,(x,y))
+            elif element == 11:
+                pantalla.blit(whiteKnight,(x,y))
+            elif element == 12:
+                pantalla.blit(blackPawn,(x,y))
+            elif element == 13:
+                pantalla.blit(whitePawn,(x,y))
+            elif element == -1:
+                pass
             x_i = x_i + 1
         y_j = y_j + 1
         y = 100 + (y_j * black)
@@ -48,7 +114,7 @@ def Draw(nombre_mapa):
         fin = fin + map_columnas
 
 def row(pixel):
-    if pixel >= 250 and pixel <= 300:
+    if pixel <= 300:
         return 0
     elif pixel > 300 and pixel <= 350:
         return 1
@@ -62,11 +128,11 @@ def row(pixel):
         return 5
     elif pixel > 550 and pixel <= 600:
         return 6
-    elif pixel > 600 and pixel <= 700:
+    elif pixel > 600:
         return 7
 
 def column(pixel):
-    if pixel >= 100 and pixel <= 150:
+    if pixel <= 150:
         return 0
     elif pixel > 150 and pixel <= 200:
         return 1
@@ -80,9 +146,8 @@ def column(pixel):
         return 5
     elif pixel > 400 and pixel <= 450:
         return 6
-    elif pixel > 450 and pixel <= 500:
+    elif pixel > 450:
         return 7
-
 
 class Piece(pygame.sprite.Sprite):
     def __init__(self, archivo_img, pos):
@@ -184,10 +249,10 @@ if __name__ == '__main__':
     pantalla.fill(color_fondo)
     # Pintar tablero
     Draw(board)
-    caballo = Caballo('blackKnight.png', [250, 100])
-    caballos.add(caballo)
-    todos.add(caballo)
+    Draw(pieces)
     reloj = pygame.time.Clock()
+    coord1 = 0
+    coord2 = 0
     while not fin:
         #Capturar eventos
         pos = pygame.mouse.get_pos()
@@ -195,15 +260,31 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 fin = True
             if event.type == pygame.MOUSEBUTTONDOWN:
-                posicion = row(pos[0]) + column(pos[1]) * 8
-                print posicion
-                #caballo.move(pos)
+                if coord1 == 0:
+                    posicion1 = row(pos[0]) + column(pos[1]) * 8
+                    if pieces[posicion1] == -1:
+                        coord1 = 0
+                    else:
+                        coord1 = 1
+                elif coord2 == 0:
+                    posicion2 = row(pos[0]) + column(pos[1]) * 8
+                    if pieces[posicion2] == -1:
+                        pieces[posicion2] = pieces[posicion1]
+                        # print posicion1
+                        pieces[posicion1] = -1
+                        coord1 = 0
+                        coord2 = 0
+                    else:
+                        coord1 = 0
+                        coord2 = 0
+        # print pieces
+        #print str(pieces[posicion])
+        #caballo.move(pos)
+        pantalla.fill(color_fondo)
+        Draw(board)
+        Draw(pieces)
 
-        #Draw(board)
-        todos.update()
-        todos.draw(pantalla)
         pygame.display.flip()
-        reloj.tick(300)
 
 
 
