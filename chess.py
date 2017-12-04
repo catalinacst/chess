@@ -22,7 +22,7 @@ board = [   0, 1, 0, 1, 0, 1, 0, 1, # 8
             ]
 
 '''
-blacks
+blacks pares
 blackKing = 2 rey
 blackQueen = 4 reina
 blackRook = 6 torre
@@ -30,7 +30,7 @@ blackBishop = 8 alfil
 blackKnight = 10 caballo
 blackPawn = 12 peon
 
-whites
+whites impares
 whiteKing = 3 rey
 whiteQueen = 5 reina
 whiteRook = 7 torre
@@ -67,6 +67,10 @@ blackKnight = pygame.image.load('blackKnight.png')
 whiteKnight = pygame.image.load('whiteKnight.png')
 blackPawn = pygame.image.load('blackPawn.png')
 whitePawn = pygame.image.load('whitePawn.png')
+
+posi = 0
+posf = 0
+caballo = None
 
 def Draw(nombre_mapa):
     inicio = x_i = y_j = 0
@@ -157,88 +161,62 @@ class Piece(pygame.sprite.Sprite):
         self.rect.x = pos[0]
         self.rect.y = pos[1]
 
-class Caballo(pygame.sprite.Sprite):
-    def __init__(self, archivo_img, pos):
-        pygame.sprite.Sprite.__init__(self)
-        self.image= pygame.image.load(archivo_img).convert_alpha()
-        self.rect=self.image.get_rect()
-        self.rect.x = pos[0]
-        self.rect.y = pos[1]
-        self.mover = 0
-        self.x = 0
-        self.y = 0
-        self.m = 0
-        self.xf = 0
-        self.yf = 0
-        self.xt = 0
-        self.yt = 0
+def mov_torre(posi, posf, fichai, fichaf):
+    if posi + 8 == posf or posi + 16 == posf or posi + 24 == posf or posi + 32 == posf or posi + 40 == posf or posi + 48 == posf or posi + 56 == posf:
+        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
+    elif posi - 8 == posf or posi - 16 == posf or posi - 24 == posf or posi - 32 == posf or posi - 40 == posf or posi - 48 == posf or posi - 56 == posf:
+        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
+    elif posi >= 0 and posi <= 7 and posf >= 0 and posf <= 7 or posi >= 8 and posi <= 15 and posf >= 8 and posf <= 15 or posi >= 16 and posi <= 23 and posf >= 16 and posf <= 23 or posi >= 24 and posi <= 31 and posf >= 24 and posf <= 31 or posi >= 32 and posi <= 39 and posf >= 32 and posf <= 39 or posi >= 40 and posi <= 47 and posf >= 40 and posf <= 47 or posi >= 48 and posi <= 55 and posf >= 48 and posf <= 55 or posi >= 56 and posi <= 63 and posf >= 56 and posf <= 63:
+        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
 
-    def move(self, pos):
-        if self.mover == 0:
-            self.mover = 1
-            self.xf = pos[0] - 15
-            self.yf = pos[1] - 10
-            self.x = self.rect.x
-            self.y = self.rect.y
-            self.xt = float(self.xf - self.rect.x)
-            self.yt = float(self.yf - self.rect.y)
-            if self.xt < 0:
-                self.xt =  self.xt * -1
-            if self.yt < 0:
-                self.yt = self.yt * -1
+def mov_peon(posi, posf, fichai, fichaf):
+    if posi >= 8 and posi <= 15 or posi >= 48 and posi <= 55:
+        if fichai == "black" and posi + 8 == posf or fichai == "white" and posi - 8 == posf or fichai == "black" and posi + 16 == posf or fichai == "white" and posi - 16 == posf:
+            if fichaf == "none":
+                pieces[posf] = pieces[posi]
+                pieces[posi] = -1
+    elif fichai == "black" and posi + 8 == posf or fichai == "white" and posi - 8 == posf:
+        if fichaf == "none":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
+    elif fichai == "black" and posi + 9 == posf or posi + 7 == posf:
+        if fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
+    elif fichai == "white" and posi - 9 == posf or posi - 7 == posf:
+        if fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
 
-    def update(self):
-        if self.mover == 1:
-            if self.xt > self.yt:
-                # Primero en X
-                if self.x < self.xf:
-                    self.x+= 1
-                    self.rect.x = self.x
-                elif self.x > self.xf:
-                    self.x-= 1
-                    self.rect.x = self.x
-                elif self.y > self.yf:
-                    self.y-= 1
-                    self.rect.y = self.y
-                elif self.y < self.yf:
-                    self.y+= 1
-                    self.rect.y = self.y
-                else:
-                    self.mover = 0
-            if self.xt < self.yt:
-                # Primero en Y
-                if self.y > self.yf:
-                    self.y-= 1
-                    self.rect.y = self.y
-                elif self.y < self.yf:
-                    self.y+= 1
-                    self.rect.y = self.y
-                elif self.x < self.xf:
-                    self.x+= 1
-                    self.rect.x = self.x
-                elif self.x > self.xf:
-                    self.x-= 1
-                    self.rect.x = self.x
-                else:
-                    self.mover = 0
+def mov_alfil(posi, posf, fichai, fichaf):
+    if posi + 9 == posf or posi + 18 == posf or posi + 27 == posf or posi + 36 == posf or posi + 45 == posf or posi + 54 == posf or posi + 63 == posf:
+        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
+    elif posi - 9 == posf or posi - 18 == posf or posi - 27 == posf or posi - 36 == posf or posi - 45 == posf or posi - 54 == posf or posi - 63 == posf:
+        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
+    elif posi + 7 == posf or posi + 14 == posf or posi + 21 == posf or posi + 28 == posf or posi + 35 == posf or posi + 42 == posf or posi + 49 == posf:
+        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
+    elif posi - 7 == posf or posi - 14 == posf or posi - 21 == posf or posi - 28 == posf or posi - 35 == posf or posi - 42 == posf or posi - 49 == posf:
+        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
 
-'''
-    # Movimiento Alfil
-    def update(self):
-        if self.mover == 1:
-            if self.x < self.xf:
-                self.x+= 1
-                self.y+= self.m
-                self.rect.x = self.x
-                self.rect.y = int(self.y)
-            elif self.x > self.xf:
-                self.x-= 1
-                self.y-= self.m
-                self.rect.x = self.x
-                self.rect.y = int(self.y)
-            else:
-                self.mover = 0
-'''
+def mov_rey(posi, posf, fichai, fichaf):
+    if posi + 1 == posf or posi - 1 == posf or posi + 8 == posf or posi - 8 == posf or posi - 7 == posf or posi - 9 == posf or posi + 7 == posf or posi + 9 == posf:
+        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+            pieces[posf] = pieces[posi]
+            pieces[posi] = -1
 
 if __name__ == '__main__':
     # Inicializar pygame
@@ -250,46 +228,60 @@ if __name__ == '__main__':
     # Pintar tablero
     Draw(board)
     Draw(pieces)
-    reloj = pygame.time.Clock()
+    # reloj = pygame.time.Clock()
     coord1 = 0
     coord2 = 0
+    fichai = 0
     while not fin:
-        #Capturar eventos
+        # capturar eventos
         pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 fin = True
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if coord1 == 0:
-                    posicion1 = row(pos[0]) + column(pos[1]) * 8
-                    if pieces[posicion1] == -1:
+                    posi = row(pos[0]) + column(pos[1]) * 8
+                    if pieces[posi] == -1:
                         coord1 = 0
                     else:
+                        fichai = pieces[posi]
+                        if fichai % 2 == 0:
+                            color_fichai = "black"
+                        else:
+                            color_fichai = "white"
                         coord1 = 1
                 elif coord2 == 0:
-                    posicion2 = row(pos[0]) + column(pos[1]) * 8
-                    if pieces[posicion2] == -1:
-                        pieces[posicion2] = pieces[posicion1]
-                        # print posicion1
-                        pieces[posicion1] = -1
+                    posf = row(pos[0]) + column(pos[1]) * 8
+                    fichaf = pieces[posf]
+                    if fichaf == -1:
+                        color_fichaf = "none"
+                    elif fichaf % 2 == 0:
+                        color_fichaf = "black"
+                    else:
+                        color_fichaf = "white"
+                    if fichai == 6 or fichai == 7:
+                        mov_torre(posi, posf, color_fichai, color_fichaf)
+                        coord1 = 0
+                        coord2 = 0
+                    elif fichai == 12 or fichai == 13:
+                        mov_peon(posi, posf, color_fichai, color_fichaf)
+                        coord1 = 0
+                        coord2 = 0
+                    elif fichai == 8 or fichai == 9:
+                        mov_alfil(posi, posf, color_fichai, color_fichaf)
+                        coord1 = 0
+                        coord2 = 0
+                    elif fichai == 2 or fichai == 3:
+                        mov_rey(posi, posf, color_fichai, color_fichaf)
                         coord1 = 0
                         coord2 = 0
                     else:
+                        pieces[posf] = pieces[posi]
+                        pieces[posi] = -1
                         coord1 = 0
                         coord2 = 0
-        # print pieces
-        #print str(pieces[posicion])
-        #caballo.move(pos)
         pantalla.fill(color_fondo)
         Draw(board)
         Draw(pieces)
-
+        #pygame.display.update()
         pygame.display.flip()
-
-
-
-
-
-
-
-#
