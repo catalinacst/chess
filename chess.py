@@ -9,7 +9,7 @@ map_filas = 8
 white = 50
 black = 50
 color_fondo = [82, 82, 82]
-ficha_anterior = "white"
+ficha_anterior = "black"
 
         #   a  b  c  d  e  f  g  h
 board = [   0, 1, 0, 1, 0, 1, 0, 1, # 8
@@ -71,7 +71,19 @@ whitePawn = pygame.image.load('whitePawn.png')
 
 posi = 0
 posf = 0
-caballo = None
+
+# posiciones iniciles fichas
+caballos_black = [1, 6]
+caballos_white = [57, 62]
+
+alfil_black = [2, 5]
+alfil_white = [58, 61]
+
+torres_black = [0, 7]
+torres_white = [56, 63]
+
+peones_black = [8, 9, 10, 11, 12, 13, 14, 15]
+peones_white = [48, 49, 50, 51, 52, 53, 54, 55]
 
 def Draw(nombre_mapa):
     inicio = x_i = y_j = 0
@@ -278,13 +290,17 @@ def mov_reina(posi, posf, fichai, fichaf):
         return False
 
 def mov_caballo(posi, posf, fichai, fichaf):
-    if posi + 15 == posf or posi + 17 == posf or posi - 15 == posf or posi - 17 == posf or posi + 10 == posf or posi - 10 == posf or posi - 6 == posf or posi + 6 == posf:
-        if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
-            return True
-        else:
-            return False
-    else:
-        return False
+    if ficha_anterior == "black":
+        index = -1
+        for posicion in caballos_white:
+            index = index + 1
+            if posicion + 15 == posf or posicion + 17 == posf or posicion - 15 == posf or posicion - 17 == posf or posicion + 10 == posf or posicion - 10 == posf or posicion - 6 == posf or posicion + 6 == posf:
+                if fichaf == "none" or fichai == "black" and fichaf == "white" or fichai == "white" and fichaf == "black":
+                    return True, index
+                else:
+                    return False, index
+            else:
+                return False, index
 
 if __name__ == '__main__':
     # Inicializar pygame
@@ -296,11 +312,9 @@ if __name__ == '__main__':
     # Pintar tablero
     Draw(board)
     Draw(pieces)
-    # reloj = pygame.time.Clock()
     coord1 = 0
     coord2 = 0
     fichai = 0
-    turno = 0 # -> first black -> 1 white
     while not fin:
         # capturar eventos
         pos = pygame.mouse.get_pos()
@@ -364,10 +378,13 @@ if __name__ == '__main__':
                         coord1 = 0
                         coord2 = 0
                     elif fichai == 10 or fichai == 11:
-                        if mov_caballo(posi, posf, color_fichai, color_fichaf):
-                            pieces[posf] = pieces[posi]
-                            pieces[posi] = -1
-                            ficha_anterior = color_fichai
+                        boole, index = mov_caballo(posi, posf, color_fichai, color_fichaf)
+                        print boole
+                        print index
+                        exit()
+                        pieces[posf] = pieces[posi]
+                        pieces[posi] = -1
+                        ficha_anterior = color_fichai
                         coord1 = 0
                         coord2 = 0
                     elif fichai == 12 or fichai == 13:
